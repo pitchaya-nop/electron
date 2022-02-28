@@ -1,8 +1,13 @@
 <template>
   <!-- Main Chat Left Sidebar start -->
   <aside class="chitchat-left-sidebar left-disp">
-    <Contacts />
-    <Chats />
+    <div v-if="activesidebar == 1">
+      <Contacts />
+    </div>
+    <div v-if="activesidebar == 2">
+      <Chats />
+    </div>
+
     <!-- <Favourite />
     <Documents />
     <ContactList />
@@ -22,6 +27,7 @@
 // import Favourite from "./lefsidebar/favourite.vue";
 import Contacts from "./lefsidebar/contacts.vue";
 import Chats from "./lefsidebar/chats.vue";
+import { mapState } from "vuex";
 export default {
   components: {
     // Status,
@@ -32,6 +38,11 @@ export default {
     // Favourite,
     Contacts,
     Chats,
+  },
+  computed: {
+    ...mapState({
+      activesidebar: (state) => state.common.activesidebar,
+    }),
   },
 };
 </script>

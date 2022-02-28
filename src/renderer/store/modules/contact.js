@@ -1,8 +1,12 @@
 /* Group Chat store For Group Chat Functionality */
 
+import { stat } from "fs";
+
 
 
 const state = {
+  activecontact:null,
+  contactdata:null
 };
 
 // getters
@@ -11,11 +15,20 @@ const getters = {
 
 // mutations
 const mutations = {
+  setActiveContact: (state, payload) => {
+    console.log(payload);
+    state.activecontact = payload;
+    
+  },
+
 };
 
 // actions
 const actions = {
-
+  setActivecontact:(context, payload) => {
+    console.log(payload);
+    context.commit("setActiveContact", payload);
+  },
   requestContactAllowAutoAdd({ commit }, payload) {
     return new Promise((resolve, reject) => {
       try {

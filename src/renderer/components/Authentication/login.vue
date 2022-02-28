@@ -15,7 +15,6 @@
                   />
                   <span class="my-auto ml-2 title-text">GoChat</span>
                 </div>
-
               </div>
               <h3>Hello Everyone , We are GoChat</h3>
               <h4>Welcome to GoChat please login to your account.</h4>
@@ -58,7 +57,11 @@
                       <label class="form-check-label" for="gridCheck1"
                         >Remember Me</label
                       >
-                      <h6><nuxt-link to="/authentication/login">Forgot Password?</nuxt-link></h6>
+                      <h6>
+                        <nuxt-link to="/authentication/login"
+                          >Forgot Password?</nuxt-link
+                        >
+                      </h6>
                     </div>
                   </div>
                 </div>
@@ -70,47 +73,50 @@
                       @click="handleLogin"
                       >Login</a
                     >
-                    <nuxt-link class="btn button-effect btn-signup" to="/authentication/signup">
+                    <nuxt-link
+                      class="btn button-effect btn-signup"
+                      to="/authentication/signup"
+                    >
                       SignUp
                     </nuxt-link>
                   </div>
                 </div>
               </form>
-<!--              <div>-->
-<!--              <div class="line">-->
-<!--                <h6>OR Connect with</h6>-->
-<!--              </div>-->
-<!--              <div class="medialogo">-->
-<!--                <ul>-->
-<!--                  <li>-->
-<!--                    <a-->
-<!--                      class="icon-btn btn-danger button-effect"-->
-<!--                      href="https://www.google.com/"-->
-<!--                      ><i class="fa fa-google"></i-->
-<!--                    ></a>-->
-<!--                  </li>-->
-<!--                  <li>-->
-<!--                    <a-->
-<!--                      class="icon-btn btn-primary button-effect"-->
-<!--                      href="https://twitter.com/"-->
-<!--                      ><i class="fa fa-twitter"></i-->
-<!--                    ></a>-->
-<!--                  </li>-->
-<!--                  <li>-->
-<!--                    <a-->
-<!--                      class="icon-btn btn-facebook button-effect"-->
-<!--                      href="https://www.facebook.com/"-->
-<!--                      ><i class="fa fa-facebook-f"></i-->
-<!--                    ></a>-->
-<!--                  </li>-->
-<!--                </ul>-->
-<!--              </div>-->
-<!--              <div class="termscondition">-->
-<!--                <h4 class="mb-0">-->
-<!--                  <span>*</span>Terms and condition<b>&amp;</b>Privacy policy-->
-<!--                </h4>-->
-<!--              </div>        -->
-<!--              </div>-->
+              <!--              <div>-->
+              <!--              <div class="line">-->
+              <!--                <h6>OR Connect with</h6>-->
+              <!--              </div>-->
+              <!--              <div class="medialogo">-->
+              <!--                <ul>-->
+              <!--                  <li>-->
+              <!--                    <a-->
+              <!--                      class="icon-btn btn-danger button-effect"-->
+              <!--                      href="https://www.google.com/"-->
+              <!--                      ><i class="fa fa-google"></i-->
+              <!--                    ></a>-->
+              <!--                  </li>-->
+              <!--                  <li>-->
+              <!--                    <a-->
+              <!--                      class="icon-btn btn-primary button-effect"-->
+              <!--                      href="https://twitter.com/"-->
+              <!--                      ><i class="fa fa-twitter"></i-->
+              <!--                    ></a>-->
+              <!--                  </li>-->
+              <!--                  <li>-->
+              <!--                    <a-->
+              <!--                      class="icon-btn btn-facebook button-effect"-->
+              <!--                      href="https://www.facebook.com/"-->
+              <!--                      ><i class="fa fa-facebook-f"></i-->
+              <!--                    ></a>-->
+              <!--                  </li>-->
+              <!--                </ul>-->
+              <!--              </div>-->
+              <!--              <div class="termscondition">-->
+              <!--                <h4 class="mb-0">-->
+              <!--                  <span>*</span>Terms and condition<b>&amp;</b>Privacy policy-->
+              <!--                </h4>-->
+              <!--              </div>        -->
+              <!--              </div>-->
             </div>
           </div>
           <div class="right-page">
@@ -202,47 +208,57 @@ const CryptoJS = require("crypto-js");
 export default {
   data() {
     return {
-      email: "ratchanonsangon@gmail.com",
-      password: "Aa123456",
+      // email: "ratchanonsangon@gmail.com",
+      // password: "Aa123456",
+
+      // email: "fimal45090@farerata.com",
+      // password: "Ab123456",
+      // email: "chet16mail@gmail.com",
+      // password: "Aa1234",
+      // email:'daxer27158@farerata.com',
+      // password:'Ab123456'
+      email:'laxabem918@hddang.com',
+      password:'Ab123456'
     };
   },
   methods: {
-
-    async handleLogin(){
-      console.log('email',this.email)
-      console.log('password',this.password)
+    async handleLogin() {
+      console.log("email", this.email);
+      console.log("password", this.password);
       try {
-        var keyHex = CryptoJS.enc.Utf8.parse('4a310288218c3394d829e49bd187c395');
-        console.log(keyHex)
+        var keyHex = CryptoJS.enc.Utf8.parse(
+          "4a310288218c3394d829e49bd187c395"
+        );
+        console.log(keyHex);
         var encrypted = CryptoJS.AES.encrypt(this.password, keyHex, {
           mode: CryptoJS.mode.ECB,
-          padding: CryptoJS.pad.Pkcs7
+          padding: CryptoJS.pad.Pkcs7,
         });
-        console.log('qwe',encrypted)
+        console.log("qwe", encrypted);
 
-        const payload = new FormData()
-        payload.append('email', this.email)
-        payload.append('password', encrypted)
+        const payload = new FormData();
+        payload.append("email", this.email);
+        payload.append("password", encrypted);
 
-        const response = await this.$store.dispatch('auth/requestSignInViaEmail',payload)
-        console.log('response',response)
+        const response = await this.$store.dispatch(
+          "auth/requestSignInViaEmail",
+          payload
+        );
+        console.log("response", response);
 
-        if(response.code === '0000'){
-          const data = response.data
-        await this.$store.dispatch('auth/setToken',data.accessToken)
-        await this.$store.dispatch('auth/setProfile',data.userProfile)
-
-          this.$router.push('/')
+        if (response.code === "0000") {
+          
+          const data = response.data;
+          await this.$store.dispatch("auth/setToken", data.accessToken);
+          await this.$store.dispatch("auth/setProfile", data.userProfile);
+          this.$router.push("/");
         }
-        console.log(data)
-        console.log(response)
+        console.log(data);
+        console.log(response);
       } catch {
-        console.log('err')
+        console.log("err");
       }
-
-
     },
-
   },
 };
 </script>

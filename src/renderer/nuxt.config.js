@@ -17,6 +17,7 @@ module.exports = {
     { src: '~/plugins/plugin.js', ssr:false },
     { src: "@/plugins/vue-lightbox.js",  ssr: false },
     '~/plugins/axios.js',
+    '~/plugins/mixins.js',
   ],
   css: [
     '@/assets/scss/app.scss',

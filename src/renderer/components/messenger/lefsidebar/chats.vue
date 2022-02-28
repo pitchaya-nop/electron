@@ -8,7 +8,7 @@
       <div class="theme-title">
         <div class="media">
           <div>
-            <h2>Chats</h2>
+            <h2>Chats</h2> <button type="button" @click="clearDB()">Clear DB</button> <button type="button" @click="closedb()">Close realm</button>
             <!-- <h4>Chat from your friends &#128536;</h4> -->
           </div>
           <!-- <div class="media-body">
@@ -203,7 +203,7 @@
             aria-labelledby="chat-tab"
           >
             <div class="theme-tab">
-              <ul class="nav nav-tabs" id="myTab1" role="tablist">
+              <!-- <ul class="nav nav-tabs" id="myTab1" role="tablist">
                 <li class="nav-item">
                   <a
                     class="nav-link button-effect"
@@ -249,7 +249,7 @@
                     >Official</a
                   >
                 </li>
-              </ul>
+              </ul> -->
               <div class="tab-content" id="myTabContent1">
                 <div
                   class="tab-pane fade"
@@ -259,6 +259,7 @@
                   aria-labelledby="direct-tab"
                 >
                   <ul class="chat-main menu-trigger">
+                    
                     <DirectChatUsers />
                   </ul>
                 </div>
@@ -296,6 +297,9 @@ export default {
       },
     };
   },
+  mounted(){
+    console.log('direct chat');
+  },
   computed: {
     ...mapState({
       activechatType: (state) => state.common.activechatType,
@@ -305,6 +309,12 @@ export default {
     }),
   },
   methods: {
+    clearDB(){
+      this.ClearRealm()
+    },
+    closedb(){
+      this.CloseRealm()
+    },
     activechatTab(type) {
       this.$store.state.common.activechatType = type;
       this.$store.state.common.showprofilemenu = false;
@@ -315,9 +325,9 @@ export default {
     mobilemenu() {
         document.querySelector(".sidebar-toggle").classList.add("mobile-menu");
     },
-    activateChat(type) {
-      this.$store.state.common.activechat = type;
-    },
+    // activateChat(type) {
+    //   this.$store.state.common.activechat = type;
+    // },
     toggleSearchbar() {
       this.openSearch = !this.openSearch;
     },

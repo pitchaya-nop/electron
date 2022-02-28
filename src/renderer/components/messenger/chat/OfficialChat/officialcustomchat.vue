@@ -7,7 +7,7 @@
             <div class="gr-chat-friend-toggle"><a class="icon-btn btn-sm pull-right add-grbtn outside" href="javascript:void(0)" @click="togglechatuser()" data-tippy-content="Add User"><feather type="plus" size="15" height="15"></feather></a>
               <div class="gr-chat-frind-content" v-bind:style="showchatuser ? 'display:block' : 'display:none;' ">
                 <ul class="chat-main">
-                  <li v-for="(user, index) in groupchatuser" :key="user.id">
+                  <li v-for="(user) in groupchatuser" :key="user.id">
                     <div class="chat-box">
                       <div class="media">
                         <div class="profile" :class="user.profile" :style="[
@@ -32,7 +32,8 @@
             <div class="gr-profile dot-btn dot-success grow" :style="[{'background-image': 'url(' + getImgUrl('avtar/3.jpg') + ')',},styleObject,]"></div>
             <div class="gr-profile dot-btn dot-success grow" :style="[{'background-image': 'url(' + getImgUrl('avtar/5.jpg') + ')',},styleObject,]"></div>
           </li>
-          <li :class="chat.sender == 0 ? 'replies': 'sent'" v-for="(chat, index) in currentChat.chat.messages" :key="index" v-if="currentChat.chat.messages.length">
+          <li :class="chat.sender == 0 ? 'replies': 'sent'" v-for="(chat, index) in currentChat.chat.messages" :key="index" >
+            <!-- v-if="currentChat.chat.messages.length" -->
                 <div class="media">
                     <div class="profile mr-4"
                     :style="chat.sender == 0 ? [{'background-image': 'url(' + getImgUrl('contact/2.jpg') + ')'},styleObject] 
@@ -68,7 +69,7 @@
                               <li :style="[{'background-image': 'url(' + getImgUrl(chat.gallery3) + ')',},styleObject,]"></li>
                             </ul>
                             <div v-if="chat.gallery1" class="refresh-block">
-                              <div class="badge badge-outline-primary refresh sm ml-2" :class="refresh? 'refreshed': ''"><feather type="rotate-cw" @click="refresh = !refresh"></feather></i></div>
+                              <div class="badge badge-outline-primary refresh sm ml-2" :class="refresh? 'refreshed': ''"><feather type="rotate-cw" @click="refresh = !refresh"></feather><i></i></div>
                               <div class="badge badge-danger sm ml-2">F</div>
                             </div>
 

@@ -10,8 +10,30 @@
     </div>
     <div class="sidebar-main">
       <ul class="sidebar-top">
-        <li><a class="icon-btn btn-light button-effect" :class="activesidebar == 1 ? 'active' : ''" href="javascript:void(0)" @click="activemenu(1)" v-b-tooltip.hover.topright title="Contacts" data-tippy-content="Contacts"><i class="fa fa-users"> </i></a></li>
-        <li><a class="icon-btn btn-light button-effect" :class="activesidebar == 2 ? 'active' : ''" href="javascript:void(0)" @click="activemenu(2)" v-b-tooltip.hover.topright title="Chats" data-tippy-content="Chats"><i class="fa fa-users"> </i></a></li>      
+        <li>
+          <a
+            class="icon-btn btn-light button-effect"
+            :class="activesidebar == 1 ? 'active' : ''"
+            href="javascript:void(0)"
+            @click="activemenu(1), disableactivechat(null)"
+            v-b-tooltip.hover.topright
+            title="Contacts"
+            data-tippy-content="Contacts"
+            ><i class="fa fa-users"> </i
+          ></a>
+        </li>
+        <li>
+          <a
+            class="icon-btn btn-light button-effect"
+            :class="activesidebar == 2 ? 'active' : ''"
+            href="javascript:void(0)"
+            @click="activemenu(2, false)"
+            v-b-tooltip.hover.topright
+            title="Chats"
+            data-tippy-content="Chats"
+            ><i class="fa fa-users"> </i
+          ></a>
+        </li>
       </ul>
       <ul class="sidebar-bottom">
         <!-- <li><a class="icon-btn btn-light button-effect mode" href="javascript:void(0)" v-b-tooltip.hover.topright title="Theme Mode" data-tippy-content="Theme Mode" data-intro="Change mode" @click="customizeMixLayout()"><i class="fa" :class="this.mixLayout===''? 'fa-moon-o': 'fa-lightbulb-o'"></i></a></li> -->
@@ -56,8 +78,13 @@ export default {
     getImgUrl(path) {
       return require("@/assets/images/" + path);
     },
-    activemenu(id) {
+    activemenu(id, type) {
+      console.log(type);
       this.$store.state.common.activesidebar = id;
+      this.$store.state.common.iscontact = type;
+    },
+    disableactivechat(type) {
+      // this.$store.state.chat.
     },
     customizeMixLayout() {
       if (this.mixLayout === "") {
@@ -71,6 +98,16 @@ export default {
     handleSingOut() {
       this.$router.push("/authentication/login");
       this.$store.dispatch("auth/setToken", "");
+      this.$store.dispatch("auth/setProfile", "");
+      this.sockets.unsubscribe("socketId");
+      this.sockets.unsubscribe(`rooms:${window.localStorage.getItem("_ref")}`);
+      this.getdataDB.then((data) => {
+        let rooms = data.objects("ROOM");
+        rooms.map((data)=>{
+              this.sockets.unsubscribe(`messages:${data.sessionId}`);
+              this.sockets.unsubscribe(`messages:update:${data.sessionId}`);
+        })
+      });
     },
   },
 };

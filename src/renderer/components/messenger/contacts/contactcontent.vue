@@ -8,8 +8,8 @@
       ><i class="ti-angle-left"></i
     ></a>
     <div class="row">
-      <div class="col-sm-5">
-        <div class="user-profile">
+      <div class="col-sm-12">
+        <div  class="user-profile" style="max-width: 100%">
           <div class="user-content">
             <img
               class="img-fluid bg-icon"
@@ -91,7 +91,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-7">
+      <!-- <div class="col-sm-7">
         <div class="personal-info-group">
           <h3>contact info</h3>
           <ul class="basic-info">
@@ -137,18 +137,22 @@
             </li>
           </ul>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <!--Contact Contents end -->
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   methods: {
     backtochat() {
       document.querySelector(".sidebar-toggle").classList.remove("mobile-menu");
     },
   },
+  computed:{
+    
+  }
 };
 </script>

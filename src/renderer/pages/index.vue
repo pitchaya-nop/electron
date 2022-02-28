@@ -7,7 +7,28 @@
 <script>
 // import Messenger from "../../components/messenger/index.vue";
 import Chat from "@/components/messenger/chat.vue";
-import io from "socket.io-client";
+import { mapState } from "vuex";
+import VueSocketIO from "vue-socket.io";
+import SocketIO from "socket.io-client";
+import Vue from "vue";
+// import io from "socket.io-client";
+Vue.use(
+  new VueSocketIO({
+    debug: false,
+    connection: "https://dev.apigochat.com/",
+    options: {
+      path: "/socket/socket.io",
+      transports: ["polling"],
+      transportOptions: {
+        polling: {
+          extraHeaders: {
+            Authorization: `Bearer ${window.localStorage.getItem("auth")}`,
+          },
+        },
+      },
+    },
+  })
+);
 export default {
   components: {
     Chat,
@@ -20,90 +41,113 @@ export default {
 
   data() {
     return {
-      socket: io(),
       syncTime: "",
     };
   },
+  computed: {
+    ...mapState({
+      sesssionid: (state) => state.chat.session,
+    }),
+  },
+ async mounted() {
+    if (this.getProfile == null) {
+     await this.getMe();
+    }
+    Vue.use(
+      new VueSocketIO({
+        debug: false,
+        connection: "https://dev.apigochat.com/",
+        options: {
+          path: "/socket/socket.io",
+          transports: ["polling"],
+          transportOptions: {
+            polling: {
+              extraHeaders: {
+                Authorization: `Bearer ${window.localStorage.getItem("auth")}`,
+              },
+            },
+          },
+        },
+      })
+    );
+    console.log("First sdqsdmqwodiedmwowoideion");
+    this.getRooms();
+    
+    // this.ClearRealm()
 
-  mounted() {
     this.sockets.subscribe("socketId", function (data) {
       this.syncTime = data.syncTime;
+      this.$socket.emit("rooms", `{"syncTime":"${this.syncTime}","page":1}`);
+      this.sockets.subscribe(`rooms:${this.getProfile.id}`, function (data) {
+        console.log("Get Rooms");
+        console.log(data.data);
+        data.data.map((item) => {
+          this.sockets.subscribe(`messages:${item.sessionId}`, function (data) {
+            if (data.data) {
+              this.addDataToRealm(data.data, "addMessage");
+              this.addDataToRealm(data.data, "updateShow");
+            }
+          });
+          this.sockets.subscribe(
+            `messages:update:${item.sessionId}`,
+            function (msgupdate) {
+              console.log(msgupdate);
+              this.addDataToRealm(msgupdate.data, "addMessage");
+              if (this.sesssionid) {
+                if (this.sesssionid == item.sessionId) {
+                  this.updateMessage(this.sesssionid);
+                }
+              }
+            }
+          );
+        });
+        data.data.map((item) => {
+          this.$socket.emit(
+            `messages`,
+            `{"syncTime":"0001-01-01 00:00:00","sessionId":"${item.sessionId}"}`
+          );
+        });
+      });
+
+      // this.sockets.subscribe(
+      //   `rooms:update:6204c1d6c96f594f6b4cacce`,
+      //   function (data) {
+      //     console.log("Rooms Update");
+      //     console.log(data);
+      //   }
+      // );
     });
-
-    const val = `{syncTime:'2021-10-25 11:32:42',page: 1}`;
-    // this.$socket.on("event-friends", (res) => {
-    //   this.$socket.emit("event-friends", val);
-    //   console.log(res);
-    // });
-
-    // this.$socket.emit("event-friends", val, (data) => {
-    //   console.log(data); // data will be 'woot' (reply from the server)
-    // });
-
-    this.$socket.emit("friends", val);
-
-    this.socket.on("friends:61dbf02ab43c5ae268243780", (data) => {
-      console.log(data);
-    });
-
-    // this.sockets.subscribe("friends:61dbf02ab43c5ae268243780", (data) => {
-    //     console.log("friends : ", data);
-    // });
-
-    // this.$socket.emit("friends", val, (data) => {
-    //   console.log(data); // data will be 'woot' (reply from the server)
-    // });
-
-    // // const userID = this.$store.getters['auth/profile']
-    // // console.log(userID)
-    // this.$socket.on('friends:61dbf02ab43c5ae268243780', (res) => {
-    //   console.log(res);
-    // });
-
-    //this.$socket.emit('socketId',);
+    
   },
-  //   sockets: {
-  //     connect: function () {
-  //       console.log("socket connected");
-  //     },
-  //     'event-friends': function (data) {
-  //       console.log('xxxxxxx', data)
-  //     }
-  //   },
-  //   mounted() {
-  //     const body = {
-  //       syncTime: "2021-10-25 11:32:42",
-  //       page: 1,
-  //     };
-
-  // this.$socket.emit('event-friends', body);
-  //     this.sockets.subscribe("event-friend:update", function(data) {
-  //       console.log("This event was fired by eg. sio.emit('kebab-case')", data)
-  //     });
-
-  // console.log('Yeah : ' , body)
-  //    this.$socket.emit("event-friends", body, data => {
-  //          console.log(data)
-  //        });
-
-  //  this.$socket.emit('event-friends', data)
-  //  this.$socket.on('event-friends', (data) => {
-  // console.log(data)
-  // });
-  // this.sockets.customEmit
-
-  // this.$socket.io.emit("customEmit", data)
-  //  this.$socket.io.on('event-rooms:update', () => {
-  //     const listener = (...args) => {
-  //       // const objectData = JSON.parse(args)
-  //       // if (objectData) {
-  //       //   this.listSocketMuay.push(objectData)
-  //       // }
-  //       // console.log('socket data : ', this.listSocketMuay)
-  //       console.log(args)
-  //     }
-  //     socket.on('msg', listener)
-  //   })
-  //},
+  methods: {
+    async getMe() {
+      console.log('getme');
+      try {
+        const response = await this.$store.dispatch("auth/getMe");
+        console.log(response);
+        if (response.message === 'success') {          
+          this.$store.dispatch('auth/setProfile',response.data.userProfile)
+          console.log(response.data.userProfile);
+        }
+      } catch (error) {}
+    },
+    async getRooms() {
+      try {
+        const payload = {
+          dateTime: "2017-01-01 00:00:00",
+          page: 1,
+          limit: 10,
+        };
+        const response = await this.$store.dispatch(
+          "room/requestRoom",
+          payload
+        );
+        if (response.status === 200) {
+          this.addDataToRealm(response.data.data, "addRooms");
+        }
+      } catch (error) {}
+    },
+    
+  },
 };
 </script>

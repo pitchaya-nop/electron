@@ -4,21 +4,21 @@ import { normalizeURL, decode } from 'ufo'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-const _2c03a66c = () => interopDefault(import('../pages/pagenotfound/index.vue' /* webpackChunkName: "pages/pagenotfound/index" */))
-const _f2516214 = () => interopDefault(import('../pages/realm.vue' /* webpackChunkName: "pages/realm" */))
-const _097e6d7b = () => interopDefault(import('../pages/authentication/login.vue' /* webpackChunkName: "pages/authentication/login" */))
-const _c3f42840 = () => interopDefault(import('../pages/authentication/login-2.vue' /* webpackChunkName: "pages/authentication/login-2" */))
-const _72a92ef6 = () => interopDefault(import('../pages/authentication/signup.vue' /* webpackChunkName: "pages/authentication/signup" */))
-const _67863a9b = () => interopDefault(import('../pages/authentication/signup-2.vue' /* webpackChunkName: "pages/authentication/signup-2" */))
-const _1a31c48f = () => interopDefault(import('../pages/blogs/blog_details/index.vue' /* webpackChunkName: "pages/blogs/blog_details/index" */))
-const _4a94e4bf = () => interopDefault(import('../pages/blogs/blog_left-sidebar/index.vue' /* webpackChunkName: "pages/blogs/blog_left-sidebar/index" */))
-const _a455b90e = () => interopDefault(import('../pages/blogs/blog_no-sidebar/index.vue' /* webpackChunkName: "pages/blogs/blog_no-sidebar/index" */))
-const _17e5ea38 = () => interopDefault(import('../pages/blogs/blog_right-sidebar/index.vue' /* webpackChunkName: "pages/blogs/blog_right-sidebar/index" */))
-const _65a80878 = () => interopDefault(import('../pages/bonus/about.vue' /* webpackChunkName: "pages/bonus/about" */))
-const _1849f8e0 = () => interopDefault(import('../pages/bonus/elements.vue' /* webpackChunkName: "pages/bonus/elements" */))
-const _ce981ae6 = () => interopDefault(import('../pages/bonus/faq.vue' /* webpackChunkName: "pages/bonus/faq" */))
-const _c35d6900 = () => interopDefault(import('../pages/bonus/price.vue' /* webpackChunkName: "pages/bonus/price" */))
-const _ea94788e = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
+const _3c788ab0 = () => interopDefault(import('../pages/pagenotfound/index.vue' /* webpackChunkName: "pages/pagenotfound/index" */))
+const _88c75960 = () => interopDefault(import('../pages/realm.vue' /* webpackChunkName: "pages/realm" */))
+const _b24e2c3e = () => interopDefault(import('../pages/authentication/login.vue' /* webpackChunkName: "pages/authentication/login" */))
+const _4eb2e6c6 = () => interopDefault(import('../pages/authentication/login-2.vue' /* webpackChunkName: "pages/authentication/login-2" */))
+const _fec38160 = () => interopDefault(import('../pages/authentication/signup.vue' /* webpackChunkName: "pages/authentication/signup" */))
+const _670ec716 = () => interopDefault(import('../pages/authentication/signup-2.vue' /* webpackChunkName: "pages/authentication/signup-2" */))
+const _538b9df5 = () => interopDefault(import('../pages/blogs/blog_details/index.vue' /* webpackChunkName: "pages/blogs/blog_details/index" */))
+const _0aee09ce = () => interopDefault(import('../pages/blogs/blog_left-sidebar/index.vue' /* webpackChunkName: "pages/blogs/blog_left-sidebar/index" */))
+const _a6a1ef5a = () => interopDefault(import('../pages/blogs/blog_no-sidebar/index.vue' /* webpackChunkName: "pages/blogs/blog_no-sidebar/index" */))
+const _66749f1e = () => interopDefault(import('../pages/blogs/blog_right-sidebar/index.vue' /* webpackChunkName: "pages/blogs/blog_right-sidebar/index" */))
+const _67e256c4 = () => interopDefault(import('../pages/bonus/about.vue' /* webpackChunkName: "pages/bonus/about" */))
+const _544c4476 = () => interopDefault(import('../pages/bonus/elements.vue' /* webpackChunkName: "pages/bonus/elements" */))
+const _204b39e7 = () => interopDefault(import('../pages/bonus/faq.vue' /* webpackChunkName: "pages/bonus/faq" */))
+const _c597b74c = () => interopDefault(import('../pages/bonus/price.vue' /* webpackChunkName: "pages/bonus/price" */))
+const _810a6fda = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
 
 const emptyFn = () => {}
 
@@ -33,63 +33,63 @@ export const routerOptions = {
 
   routes: [{
     path: "/pagenotfound",
-    component: _2c03a66c,
+    component: _3c788ab0,
     name: "pagenotfound"
   }, {
     path: "/realm",
-    component: _f2516214,
+    component: _88c75960,
     name: "realm"
   }, {
     path: "/authentication/login",
-    component: _097e6d7b,
+    component: _b24e2c3e,
     name: "authentication-login"
   }, {
     path: "/authentication/login-2",
-    component: _c3f42840,
+    component: _4eb2e6c6,
     name: "authentication-login-2"
   }, {
     path: "/authentication/signup",
-    component: _72a92ef6,
+    component: _fec38160,
     name: "authentication-signup"
   }, {
     path: "/authentication/signup-2",
-    component: _67863a9b,
+    component: _670ec716,
     name: "authentication-signup-2"
   }, {
     path: "/blogs/blog_details",
-    component: _1a31c48f,
+    component: _538b9df5,
     name: "blogs-blog_details"
   }, {
     path: "/blogs/blog_left-sidebar",
-    component: _4a94e4bf,
+    component: _0aee09ce,
     name: "blogs-blog_left-sidebar"
   }, {
     path: "/blogs/blog_no-sidebar",
-    component: _a455b90e,
+    component: _a6a1ef5a,
     name: "blogs-blog_no-sidebar"
   }, {
     path: "/blogs/blog_right-sidebar",
-    component: _17e5ea38,
+    component: _66749f1e,
     name: "blogs-blog_right-sidebar"
   }, {
     path: "/bonus/about",
-    component: _65a80878,
+    component: _67e256c4,
     name: "bonus-about"
   }, {
     path: "/bonus/elements",
-    component: _1849f8e0,
+    component: _544c4476,
     name: "bonus-elements"
   }, {
     path: "/bonus/faq",
-    component: _ce981ae6,
+    component: _204b39e7,
     name: "bonus-faq"
   }, {
     path: "/bonus/price",
-    component: _c35d6900,
+    component: _c597b74c,
     name: "bonus-price"
   }, {
     path: "/",
-    component: _ea94788e,
+    component: _810a6fda,
     name: "index"
   }],
 

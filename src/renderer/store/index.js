@@ -28,19 +28,19 @@ Vue.use(Vuex);
 //   })
 // );
 
-Vue.use(new VueSocketIO({
-  debug: true,
-  connection: 'https://dev.apigochat.com/',
-  options: { path: "/socket/socket.io" ,
-  transports: ['polling'] ,
-  transportOptions: {
-    polling: {
-      extraHeaders: {
-        Authorization: `Bearer ${window.localStorage.getItem('auth')}`
-      }
-    }
-  },}
-}))
+// Vue.use(new VueSocketIO({
+//   debug: true,
+//   connection: 'https://dev.apigochat.com/',
+//   options: { path: "/socket/socket.io" ,
+//   transports: ['polling'] ,
+//   transportOptions: {
+//     polling: {
+//       extraHeaders: {
+//         Authorization: `Bearer ${window.localStorage.getItem('auth')}`
+//       }
+//     }
+//   },}
+// }))
 
 const createStore = () => {
   return new Vuex.Store({

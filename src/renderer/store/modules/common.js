@@ -6,6 +6,7 @@ import layout from "../../data/layout.json";
 import wallpaper from "../../data/wallpapers.json";
 
 const state = {
+  iscontact:false,
   activechatType: 1,
   activechat: 1,
   activecall: 1,

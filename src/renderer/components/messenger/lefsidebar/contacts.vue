@@ -203,7 +203,7 @@
             aria-labelledby="chat-tab"
           >
             <div class="theme-tab">
-              <ul class="nav nav-tabs" id="myTab1" role="tablist">
+              <!-- <ul class="nav nav-tabs" id="myTab1" role="tablist">
                 <li class="nav-item">
                   <a
                     class="nav-link button-effect"
@@ -249,7 +249,7 @@
                     >Official</a
                   >
                 </li>
-              </ul>
+              </ul> -->
               <div class="tab-content" id="myTabContent1">
                 <div
                   class="tab-pane fade"
@@ -331,10 +331,11 @@ export default {
     ...mapState({
       // activesidebar: (state) => state.common.activesidebar,
       // favourite: (state) => state.sidebar.favourite,
-        activechatType: (state) => state.common.activechatType,
+      activechatType: (state) => state.common.activechatType,
       activechat: (state) => state.common.activechat,
       toggleleftside: (state) => state.common.toggleleftside,
       activesidebar: (state) => state.common.activesidebar,
+      iscontact:(state)=>state.common.iscontact
     }),
   },
   methods: {
@@ -346,7 +347,7 @@ export default {
       this.$store.state.common.showcontactcontent = false;
     },
     mobilemenu() {
-        document.querySelector(".sidebar-toggle").classList.add("mobile-menu");
+      document.querySelector(".sidebar-toggle").classList.add("mobile-menu");
     },
     activateChat(type) {
       this.$store.state.common.activechat = type;

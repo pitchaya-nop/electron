@@ -46,7 +46,7 @@
           </div>
           <div class="date-status" v-if="user.group">
             <ul class="grop-icon">
-              <!-- <li>
+              <li>
                 <a
                   class="group-tp"
                   href="javascript:void(0)"
@@ -78,7 +78,7 @@
                     src="../../../../assets/images/contact/3.jpg"
                     alt="group-icon-img"
                 /></a>
-              </li> -->
+              </li>
               <li>+ {{ user.group }}</li>
             </ul>
           </div>

@@ -11,27 +11,86 @@
         </div>
       </div>
     </div>
+    
     <li
       :class="{ active: activeIndex === index }"
-      v-for="(user, index) in chatUser"
+      v-for="(user, index) in filtershow"
       :key="user.id"
-      @click="setActive(index), setActiveuser(user.id)"
+      @click="
+        setActive(index),
+          setActiveuser(user.id),
+          setSeesionuser(user.sessionid),
+          setChatuser(user.sessionid)
+      "
     >
       <div class="chat-box">
-        <!-- <div
+        <div class="media">
+          <!-- <div
           :style="[
             { 'background-image': 'url(' + getImgUrl(user.avatars.thumbnail) + ')' },
             styleObject,
           ]"
         ></div> -->
-        <div class="details">
-          <h5>{{ user.displayName }}</h5>
-          <!-- <h6>{{ user.status }}</h6> -->
-        </div>
-        <div class="date-status">
-          <i class="ti-pin2"></i>
-          <!-- <h6>{{ user.date }}</h6>
+          <div
+            class="profile"
+            :style="
+              user.sessiontype == 'CHAT'
+                ? user.user.avatar
+                  ? [
+                      {
+                        'background-image': 'url(' + user.user.avatar + ')',
+                      },
+                      styleObject,
+                    ]
+                  : [
+                      {
+                        'background-image':
+                          'url(/_nuxt/src/renderer/assets/images/media/1.jpg)',
+                      },
+                      styleObject,
+                    ]
+                : user.sessiontype == 'GROUP'
+                ? user.groupavatar.source
+                  ? [
+                      {
+                        'background-image':
+                          'url(' + user.groupavatar.source + ')',
+                      },
+                      styleObject,
+                    ]
+                  : [
+                      {
+                        'background-image':
+                          'url(/_nuxt/src/renderer/assets/images/media/1.jpg)',
+                      },
+                      styleObject,
+                    ]
+                : [
+                    {
+                      'background-image':
+                        'url(/_nuxt/src/renderer/assets/images/media/1.jpg)',
+                    },
+                    styleObject,
+                  ]
+            "
+          ></div>
+          <div class="details">
+            <h5>
+              {{
+                user.sessiontype == "CHAT"
+                  ? user.user.displayName
+                  : user.sessiontype == "GROUP"
+                  ? user.groupname
+                  : ""
+              }}
+            </h5>
+            <h6>Last Message Coming soon..</h6>
+          </div>
+          <div class="date-status">
+            <i class="ti-pin2"></i>
+            <!-- <h6>{{ user.date }}</h6>
           <div v-html="user.active"></div> -->
+          </div>
         </div>
       </div>
     </li>
@@ -45,7 +104,8 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      activeIndex: 0,
+      count: [],
+      activeIndex: null,
       styleObject: {
         "background-size": "cover",
         "background-position": "center",
@@ -55,20 +115,51 @@ export default {
     };
   },
   mounted() {
-    this.getChat();
+    // this.getChat();
+    this.getdataDB.then((data) => {
+      this.chatUser = data.objects("ROOM");
+      for (let i = 0; i < this.chatUser.length; i++) {
+        console.log(this.chatUser[i]);
+      }
+    });
   },
   computed: {
+    filtershow: function () {
+      return this.chatUser.filter((i) => i.isshow == true);
+    },
     // ...mapState({
-    //   chatuser: (state) => state.chat.users,
-    //   activechatType: (state) => state.common.activechatType,
-    // }),
+
+    // })
   },
   methods: {
+    // getcontainer(){
+    //   const contain = document.querySelector('.scrolltopdirectchat')
+    //   contain.scrollTop = contain.scrollHeight;
+
+    // },
+    
     getImgUrl(path) {
       return require("../../../../assets/images/" + path);
     },
+    setChatuser: function (sessionid) {
+      this.getdataDB.then((data) => {
+        let msg = data
+          .objects("MESSAGE")
+          .filtered(`sessionid == "${sessionid}"`);
+        this.$store.dispatch("chat/setChat", msg);
+      });
+      setTimeout(() => {
+        const contain = document.querySelector(".scrolltopdirectchat");
+        contain.scrollTop = contain.scrollHeight;
+      }, 100);
+      
+    },
+    setSeesionuser: function (sessionid) {
+      this.$store.dispatch("chat/setSessionChat", sessionid);
+    },
     setActiveuser: function (id) {
       this.$store.dispatch("chat/setActiveuser", id);
+
       if (process.client) {
         this.width = window.innerWidth;
         if (this.width < 992) {
@@ -86,25 +177,28 @@ export default {
     setActive(index) {
       this.activeIndex = index;
     },
-    async getChat() {
-      try {
-        const payload = {
-          dateTime: "2017-01-01 00:00:00",
-          page: 1,
-          limit: 10,
-        };
-        const response = await this.$store.dispatch(
-          "contact/requestContactFrinds",
-          payload
-        );
-        if (response.status === 200) {
-         this.chatUser = response.data.data
-        }
-      } catch (error) {
-      } finally {
-        console.log()
-      }
-    },
+    // async getChat() {},
+    // async getChat() {
+    //   try {
+    //     const payload = {
+    //       dateTime: this.getCurrentTime,
+    //       page: 1,
+    //       limit: 10,
+    //     };
+    //     const response = await this.$store.dispatch(
+    //       "room/requestRoom",
+    //       payload
+    //     );
+    //     if (response.status === 200) {
+
+    //       console.log(response.data.data);
+    //       this.chatUser = response.data.data;
+    //     }
+    //   } catch (error) {
+    //   } finally {
+    //     console.log();
+    //   }
+    // },
   },
 };
 </script>

@@ -3,19 +3,29 @@
 
 
 const state = {
+  roomchange:0
 };
 
 // getters
 const getters = {
+  currentRoom: (state) => {
+    
+    return { count:state.roomchange };
+  },
 };
 
 // mutations
 const mutations = {
+  roomChange:(state,payload) =>{
+    state.roomchange += payload
+  }
 };
 
 // actions
 const actions = {
-
+  roomChange:(context,payload)=>{
+    context.commit("roomChange", payload);
+  },
   requestRoom({ commit }, payload) {
     return new Promise((resolve, reject) => {
       try {

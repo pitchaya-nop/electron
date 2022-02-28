@@ -15,25 +15,35 @@
       :class="{ active: activeIndex === index }"
       v-for="(user, index) in chatUser"
       :key="user.id"
-      @click="setActive(index), setActiveuser(user.id)"
+     @click="setActiveContact(user.id),setActive(index)"
     >
+    <!-- @click="setActive(index), setActiveuser(user.id)" -->
       <div class="chat-box">
         <div class="media">
-            <div
-              class="profile"
-              :style="user.avatars.thumbnail ? [
-                { 'background-image': 'url(' + user.avatars.thumbnail + ')' },
-                styleObject,
-              ] : [
-                { 'background-image': 'url(/_nuxt/src/renderer/assets/images/media/1.jpg)' },
-                styleObject,
-              ]"
-            ></div>
-            <div class="details">
-              <h5>{{ user.displayName }}</h5>
-              <h6 style="min-height: 20.6px;">{{ user.statusMessage }}</h6> 
-            </div>
-            <!-- <div class="media-body">
+          <div
+            class="profile"
+            :style="
+              user.avatars.thumbnail
+                ? [
+                    {
+                      'background-image': 'url(' + user.avatars.thumbnail + ')',
+                    },
+                    styleObject,
+                  ]
+                : [
+                    {
+                      'background-image':
+                        'url(/_nuxt/src/renderer/assets/images/media/1.jpg)',
+                    },
+                    styleObject,
+                  ]
+            "
+          ></div>
+          <div class="details">
+            <h5>{{ user.displayName }} </h5>
+            <h6 style="min-height: 20.6px">{{ user.statusMessage }}</h6>
+          </div>
+          <!-- <div class="media-body">
               <a
                 class="icon-btn btn-sm pull-right favourite"
                 :class="active(index) ? 'btn-primary' : 'btn-outline-primary'"
@@ -43,7 +53,7 @@
                 <feather type="star" size="15" height="15"> </feather
               ></a>
             </div> -->
-          </div>
+        </div>
       </div>
     </li>
   </div>
@@ -56,7 +66,8 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      activeIndex: 0,
+      activeIndex: null,
+      syncTime: "",
       styleObject: {
         "background-size": "cover",
         "background-position": "center",
@@ -66,7 +77,23 @@ export default {
     };
   },
   mounted() {
+    
     this.getChat();
+    // this.sockets.subscribe("socketId", function (data) {
+    //   this.syncTime = data.syncTime;
+    //   this.$socket.emit(
+    //         "rooms",
+    //         `{"syncTime":"${this.syncTime}","page":1}`
+    //       );
+    //       this.sockets.subscribe(
+    //         "rooms:61dbf02ab43c5ae268243780",
+    //         function (data) {
+    //           console.log("Rooms:  !!!!!!!!!!!!");
+    //           console.log(data);
+    //         }
+    //       );
+    // });
+    // this.getRoom();
   },
   computed: {
     // ...mapState({
@@ -78,8 +105,8 @@ export default {
     getImgUrl(path) {
       return require("../../../../assets/images/" + path);
     },
-    async setActiveuser(id) {
-       try {
+    async getRoom() {
+      try {
         const payload = {
           dateTime: "2017-01-01 00:00:00",
           page: 1,
@@ -90,14 +117,27 @@ export default {
           payload
         );
         if (response.status === 200) {
-          this.$store.dispatch("chat/setActiveuser", id);
-        //  this.chatUser = response.data.data
-        console.log(response)
+          console.log('@@@@@@@@@@@@@@@@@@@@@');
+          console.log(response);
+          // console.log(response);
+          
+          // this.sockets.subscribe("rooms", function (data) {
+
+          // });
         }
       } catch (error) {
       } finally {
-        console.log()
+        console.log();
       }
+    },
+    setActiveContact(id){
+      this.$store.state.common.iscontact = true
+      // this.$store.dispatch("contact/setActiveuser", id);
+      this.$store.dispatch("contact/setActivecontact",id)
+    },
+    async setActiveuser(id) {
+      this.$store.dispatch("chat/setActiveuser", id);
+
       // this.$store.dispatch("chat/setActiveuser", id);
       // if (process.client) {
       //   this.width = window.innerWidth;
@@ -112,7 +152,6 @@ export default {
       // this.$store.state.common.showsticker = false;
       // this.$store.state.common.showemogi = false;
       // this.$store.state.common.showcontactcontent = false;
-
     },
     setActive(index) {
       this.activeIndex = index;
@@ -129,11 +168,11 @@ export default {
           payload
         );
         if (response.status === 200) {
-         this.chatUser = response.data.data
+          this.chatUser = response.data.data;
         }
       } catch (error) {
       } finally {
-        console.log()
+        console.log();
       }
     },
   },
