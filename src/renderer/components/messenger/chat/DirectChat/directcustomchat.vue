@@ -2,42 +2,83 @@
   <!--Direct Chat start -->
   <div class="contact-chat">
     <ul class="chatappend">
-      <!-- {{
-        this.currentchat.chat
-      }}
-      <button type="button" @click="writedb()">write DB</button>
-      <button type="button" @click="getdb()">get DB</button> -->
-      <!-- <button type="button" @click="emitaction()">emit socket</button> -->
-      <!-- {{this.currentchat.count}} -->
-      <!-- <button type="button" @click="getdb()">get DB</button> -->
-      <!-- {{sessionroom}} -->
-      <!-- <p v-for="(chat, index) in currentChat.chat" :key="index">
-        {{chat.content}}
-      </p> -->
-      <!-- {{
-        this.testdata
-      }} -->
-      
+      <template v-if="currentChat.chat">
         <li
-          :class="chat.senderid == userprofile.id ? 'sent' : 'replies'"
-
+          :class="
+            chat.senderid == userprofile.id || checksender(chat.senderid)
+              ? 'sent'
+              : 'replies'
+          "
           v-for="(chat, index) in currentChat.chat"
           :key="index"
+          :style="
+            currentChat.unread &&
+            chat.senderid != userprofile.id &&
+            chat.createdtime == currentChat.unread &&
+            chat.messageid == currentChat.firstunread
+              ? 'width:100%'
+              : 'width:80%'
+          "
         >
+          <p
+            class="unreadmessage"
+            style="
+              margin-top: 1rem;
+              text-align: center;
+              background-color: #fff;
+              color: #2a2a54;
+              border-radius: 10px;
+            "
+            v-if="
+              currentChat.unread &&
+              chat.createdtime == currentChat.unread &&
+              chat.messageid == currentChat.firstunread &&
+              chat.senderid != userprofile.id &&
+              roomtype == 'user'
+            "
+          >
+            Unread message below
+          </p>
+          <p
+            class="unreadmessage"
+            style="
+              margin-top: 1rem;
+              text-align: center;
+              background-color: #fff;
+              color: #2a2a54;
+              border-radius: 10px;
+            "
+            v-if="
+              currentChat.unread &&
+              chat.createdtime == currentChat.unread &&
+              chat.messageid == currentChat.firstunread &&
+              roomtype == 'official' &&
+              checksender(chat.senderid) != true
+            "
+          >
+            Unread message below
+          </p>
+
           <div class="media">
             <div
               class="profile mr-4"
               :style="
-                chat.senderid == userprofile.id
+                chat.senderid == userprofile.id || checksender(chat.senderid)
                   ? [
                       {
-                        'background-image':`url(${userprofile.avatars.source})`
+                        'background-image':
+                          userprofile.avatars.source != 'null'
+                            ? `url(${userprofile.avatars.source})`
+                            : 'url(/_nuxt/src/renderer/assets/images/media/1.jpg)',
                       },
                       styleObject,
                     ]
                   : [
                       {
-                        'background-image':`url(${chat.avatar})`,
+                        'background-image':
+                          chat.avatar != 'null'
+                            ? `url(${chat.avatar})`
+                            : 'url(/_nuxt/src/renderer/assets/images/media/1.jpg)',
                       },
                       styleObject,
                     ]
@@ -46,16 +87,146 @@
             <div class="media-body">
               <div class="contact-name">
                 <h5>
-                  {{ chat.senderid == userprofile.id ? "Me" : "You" }}
+                  {{
+                    chat.senderid == userprofile.id ||
+                    checksender(chat.senderid)
+                      ? ""
+                      : chat.displayname
+                  }}
                 </h5>
                 <!-- <h6>{{ chat.time }}</h6> -->
                 <ul class="msg-box">
                   <!-- v-if="currentChat.chat.id == 0 && !chat.stickerpath" -->
                   <li class="msg-setting-main">
                     <!-- <DropDown v-if="chat.sender == 0 && !chat.lastmsg" /> -->
-                    <h5>
-                      {{ chat.content }}
-                    </h5>
+                    <!-- v-if="chat.contenttype == 'TEXT'" -->
+                    <h5
+                      v-if="chat.contenttype == 'TEXT'"
+                      style="
+                        white-space: pre-wrap;
+                        text-align: left;
+                        word-break: break-all;
+                      "
+                    >{{ chat.content }}</h5>
+                    <div
+                      v-if="chat.contenttype == 'IMAGE'"
+                      :style="
+                        chat.senderid == userprofile.id ||
+                        checksender(chat.senderid)
+                          ? `background:transparent;border-radius:6px 2px 6px 6px`
+                          : `background:transparent;border-radius:2px 6px 6px 6px;`
+                      "
+                    >
+                      <div
+                        style="display: flex; flex-wrap: wrap; max-width: 257px"
+                        :style="chat.media.length > 1 ? 'width:257px' : ''"
+                      >
+                        <div
+                          v-for="image in chat.media"
+                          :key="image.id"
+                          :style="
+                            chat.media.length > 1
+                              ? 'flex:1 1 50%;border:1px solid transparent;height:126px'
+                              : 'flex:0 0 100%'
+                          "
+                        >
+                          <img
+                            :src="image.imageSource"
+                            style="
+                              width: 100%;
+                              height: 100%;
+                              object-fit: cover;
+                              object-position: center;
+                              max-height: 346px;
+                            "
+                            :style="
+                              chat.senderid == userprofile.id ||
+                              checksender(chat.senderid)
+                                ? 'border-radius:6px 2px 6px 6px'
+                                : 'border-radius:2px 6px 6px 6px'
+                            "
+                          />
+                        </div>
+                      </div>
+                      <!-- min-width:100px;
+                                    min-height:100px;
+                                    max-width:257px;
+                                    max-height:346px;
+                                    border-radius:6px 2px 6px 6px -->
+                      <!-- <a @click="preview()"></a> -->
+                      <!-- <img 
+                      :src="chat.media[0].imageSource" 
+                      style="
+                      width:auto;height:auto; 
+                      min-width:100px;
+                      min-height:100px;
+                      max-width:257px;
+                      max-height:346px;
+                      border-radius:6px 2px 6px 6px
+                      " 
+                      :style="(chat.senderid == userprofile.id) || checksender(chat.senderid)?'border-radius:6px 2px 6px 6px':'border-radius:2px 6px 6px 6px'"
+                      /> -->
+                    </div>
+
+                    <div style="display: flex; flex-direction: column">
+                      <div
+                        v-if="
+                          chat.status == 'READ' &&
+                          (chat.senderid == userprofile.id ||
+                            checksender(chat.senderid))
+                        "
+                        class="badge sm ml-2"
+                        :class="'badge-success'"
+                        style="display: block"
+                      >
+                        R
+                      </div>
+                      <div v-if="chat.status == 'READ'" class="badge sm ml-2">
+                        {{ infoTime(chat.createdtime) }}
+                      </div>
+                    </div>
+                    <div style="display: flex; flex-direction: column">
+                      <div
+                        v-if="
+                          chat.status == 'SENT' &&
+                          (chat.senderid == userprofile.id ||
+                            checksender(chat.senderid))
+                        "
+                        class="badge sm ml-2"
+                        :class="'badge-dark'"
+                        style="display: block"
+                      >
+                        S
+                      </div>
+                      <div v-if="chat.status == 'SENT'" class="badge sm ml-2">
+                        {{ infoTime(chat.createdtime) }}
+                      </div>
+                    </div>
+                    <div
+                      v-if="
+                        chat.status == 'WAITING' &&
+                        (chat.senderid == userprofile.id ||
+                          checksender(chat.senderid))
+                      "
+                      class="badge sm ml-2"
+                      :class="'badge-warning'"
+                    >
+                      W
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: row;margin-right:10px" 
+                    v-if="
+                        chat.status == 'FAILED' &&
+                        (chat.senderid == userprofile.id ||
+                          checksender(chat.senderid))
+                      "
+                      >
+                      
+                      <a @click="resendfailed(chat)" style="background: red;border-radius: 50%;width: 20px;height: 20px;color: white;text-align: center;font-weight: bold;">
+                        !
+                      </a>
+                    </div>
+
                     <!-- <DropDown v-if="chat.sender == 1" />
                     <DropDown v-if="chat.sender == 0 && chat.lastmsg" /> -->
                   </li>
@@ -162,8 +333,9 @@
             </div>
           </div>
         </li>
-        <div id="lastmessage"></div>
-        <!-- <li :class="typing ? 'sent last typing-': 'sent'" :style="typing? 'display: block': 'display: none'">
+      </template>
+
+      <!-- <li :class="typing ? 'sent last typing-': 'sent'" :style="typing? 'display: block': 'display: none'">
               <div class="media">
                  <div class="profile mr-4" :style="[{'background-image': 'url(' + getImgUrl(currentChat.img) + ')'},styleObject]"></div>
                  <div class="media-body">
@@ -182,7 +354,6 @@
                  </div>
               </div>
             </li> -->
-      
 
       <div v-if="!currentChat.chat">
         <div class="contact-chat">
@@ -215,13 +386,15 @@
       </div>
     </ul>
   </div>
+
   <!--Direct Chat end -->
 </template>
 
 <script>
 import { mapState } from "vuex";
 import DropDown from "../../common/dropdown.vue";
-
+import moment from "moment";
+import { v4 as uuidv4 } from "uuid";
 export default {
   components: {
     DropDown,
@@ -238,25 +411,98 @@ export default {
       },
     };
   },
-  mounted() {
-    
-  },
+
   methods: {
-    writedb() {
-      this.addDataToRealm("", "addMessage");
+    preview() {
+      window.open(
+        "https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000",
+        "_blank"
+      );
+    },
+    async resendfailed(failedmessage) {
+      console.log(failedmessage);
+      if (failedmessage.contenttype == "TEXT") {
+        const payload = {
+          sessionId: failedmessage.sessionid,
+          referenceKey: uuidv4(),
+          contentType: "TEXT",
+          content: failedmessage.content,
+          destructTime: 0,
+          senderId: this.userprofile.id,
+          oaId: this.userprofile.id,
+        };
+        // this.addDataToRealm(payload, "addDummyMessage");
+        this.setMessage(this.sessionID);
+        const res = await this.$store.dispatch("chat/addChat", payload);
+        console.log(res);
+        if (res.data.message != "success") {
+          this.addDataToRealm(payload, "failedUpdateDummyMesaage");
+          this.setMessage(this.sessionID);
+        }
+      } 
+      
+    },
+    addMessage(e) {
+      var preScrollHeight = e.target.scrollHeight;
+      if (e.target.scrollTop <= 0) {
+        this.$store.state.chat.messagelength += 5;
+        this.setMessage(this.sessionroom);
+        const contain = document.querySelector(".scrolltopdirectchat");
+        setTimeout(() => {
+          var postScrollHeight = contain.scrollHeight;
+          var delta = postScrollHeight - preScrollHeight;
+          contain.scrollBy(0, delta);
+        }, 10);
+      }
+    },
+    checksender(senderid) {
+      if (this.userprofile.adminuserids) {
+        if (this.userprofile.adminuserids.indexOf(senderid) != -1) {
+          return true;
+        } else {
+          return false;
+        }
+      }
     },
     getImgUrl(path) {
       return require("../../../../assets/images/" + path);
     },
+    infoTime(time) {
+      var stillUtc = moment.utc(time).toDate();
+      if (
+        moment(stillUtc).local().format("DD/MM/YYYY") ==
+        moment(new Date()).format("DD/MM/YYYY")
+      ) {
+        return moment(stillUtc).local().format("HH:mm");
+      } else {
+        return moment(stillUtc).local().format("DD/MM");
+      }
+    },
+  },
+  mounted() {
+    console.log("firsttime");
+    document
+      .querySelector(".scrolltopdirectchat")
+      .addEventListener("scroll", this.addMessage, false);
+  },
+  beforeDestroy() {
+    document
+      .querySelector(".scrolltopdirectchat")
+      .removeEventListener("scroll", this.addMessage, false);
+  },
+  destroyed() {
+    document
+      .querySelector(".scrolltopdirectchat")
+      .removeEventListener("scroll", this.addMessage, false);
   },
   computed: {
     ...mapState({
       typing: (state) => state.chat.typing,
       sessionroom: (state) => state.chat.session,
-      userprofile:(state)=>state.auth.profile,
+      userprofile: (state) => state.auth.profile,
+      roomtype: (state) => state.room.roomtype,
       currentChat() {
         return (this.currentchat = this.$store.getters["chat/currentChat"]);
-        // this.getdataDB.then((data) => { this.testdata = data.objects("MESSAGE").filtered(`sessionid == "${this.sessionroom}"`) })
       },
     }),
   },

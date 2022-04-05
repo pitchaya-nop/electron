@@ -31,13 +31,15 @@
             ></div> -->
           </div>
           <div class="media-body">
-            <h5>{{ currentChat.name }}</h5>
-            <!-- <div
-              class="badge"
-              :class="currentChat.online ? 'badge-success' : 'badge-danger'"
+            <h5>Name Reciever</h5>
+            <div
+              class="badge badge-success"
+              
             >
-              {{ currentChat.online ? "Active" : "InActive" }}
-            </div> -->
+            <!-- :class="currentChat.online ? 'badge-success' : 'badge-danger'" -->
+              <!-- {{ currentChat.online ? "Active" : "InActive" }} -->
+              Active
+            </div>
           </div>
           <div class="media-right">
             <ul>
@@ -53,14 +55,14 @@
                   ></i
                 ></a>
               </li> -->
-              <li>
+              <!-- <li>
                 <a
                   class="icon-btn btn-light search-right"
                   href="javascript:void(0)"
                   @click="toggleSearchbar()"
                   ><feather type="search" size="15" height="15"></feather
                 ></a>
-              </li>
+              </li> -->
               <li>
                 <a
                   class="icon-btn btn-light button-effect mobile-sidebar"

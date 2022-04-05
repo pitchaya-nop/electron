@@ -25,6 +25,7 @@ let store = {};
   resolveStoreModules(require('../store/modules/contact.js'), 'modules/contact.js')
   resolveStoreModules(require('../store/modules/groupchat.js'), 'modules/groupchat.js')
   resolveStoreModules(require('../store/modules/layout.js'), 'modules/layout.js')
+  resolveStoreModules(require('../store/modules/official.js'), 'modules/official.js')
   resolveStoreModules(require('../store/modules/room.js'), 'modules/room.js')
   resolveStoreModules(require('../store/modules/sidebar.js'), 'modules/sidebar.js')
 
@@ -40,6 +41,7 @@ let store = {};
       '../store/modules/contact.js',
       '../store/modules/groupchat.js',
       '../store/modules/layout.js',
+      '../store/modules/official.js',
       '../store/modules/room.js',
       '../store/modules/sidebar.js',
     ], () => {

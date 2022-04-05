@@ -1,33 +1,52 @@
 /* Group Chat store For Group Chat Functionality */
 
-import { stat } from "fs";
-
-
-
+const innitialstate={
+  activecontact: null,
+  contactdata: null
+}
 const state = {
-  activecontact:null,
-  contactdata:null
+  activecontact: null,
+  contactdata: null
 };
 
 // getters
 const getters = {
+  currentContact: (state) => {
+    
+    return { contacts: state.contactdata }
+  }
+
 };
 
 // mutations
 const mutations = {
   setActiveContact: (state, payload) => {
-    console.log(payload);
-    state.activecontact = payload;
     
-  },
+    state.activecontact = payload;
 
+  },
+  setContact: (state, payload) => {
+    
+    state.contactdata = payload;
+  },
+  RESET_STATE(state) {
+    Object.assign(state, innitialstate)
+  }
 };
 
 // actions
 const actions = {
-  setActivecontact:(context, payload) => {
-    console.log(payload);
+
+  resetState({ commit }) {
+    commit('RESET_STATE')
+  },
+  setActivecontact: (context, payload) => {
+  
     context.commit("setActiveContact", payload);
+  },
+  setContact:(context, payload)=>{
+    
+    context.commit("setContact", payload);
   },
   requestContactAllowAutoAdd({ commit }, payload) {
     return new Promise((resolve, reject) => {

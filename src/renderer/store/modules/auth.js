@@ -5,14 +5,17 @@
 const state = {
   profile: null,
   token: window.localStorage.getItem('auth') || '',
-  ownerid:null
+  ownerid: null,
+  ofiicialprofile:null
 };
 
 // getters
 const getters = {
   token: (state) => state.token,
   profile: (state) => state.profile,
-  
+  ofiicialprofile:(state)=>state.ofiicialprofile,
+
+ 
 };
 
 // mutations
@@ -36,7 +39,10 @@ const mutations = {
       window.localStorage.setItem('_ref', state.profile.id)
     }
   },
-
+  SET_OFFICIAL_PROFILE(state, officialprofile) {
+    state.ofiicialprofile = officialprofile
+  },
+  
 
 
 };
@@ -61,7 +67,10 @@ const actions = {
   setProfile({ commit }, profile) {
     commit('SET_PROFILE', profile)
   },
-  getMe(){
+  setOfficialProfile({ commit }, officialprofile) {
+    commit('SET_OFFICIAL_PROFILE', officialprofile)
+  },
+  getMe() {
     return new Promise((resolve, reject) => {
       try {
         const response = this.$axios.$post(`/profile/me`);
@@ -71,7 +80,7 @@ const actions = {
       }
     });
   }
-  
+
 };
 
 export default {

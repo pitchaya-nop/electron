@@ -1,30 +1,40 @@
 /* Group Chat store For Group Chat Functionality */
 
 
-
+const innitialstate = {
+  roomdata:null,
+  roomtype:'user'
+}
 const state = {
-  roomchange:0
+  roomdata:null,
+  roomtype:'user'
 };
 
 // getters
 const getters = {
   currentRoom: (state) => {
     
-    return { count:state.roomchange };
+    return { room:state.roomdata };
   },
 };
 
 // mutations
 const mutations = {
-  roomChange:(state,payload) =>{
-    state.roomchange += payload
+  setRoom:(state,payload) =>{
+    state.roomdata = payload
+  },
+  RESET_STATE(state) {
+    Object.assign(state, innitialstate)
   }
 };
 
 // actions
 const actions = {
-  roomChange:(context,payload)=>{
-    context.commit("roomChange", payload);
+  resetState({ commit }) {
+    commit('RESET_STATE')
+  },
+  setRoom:(context,payload)=>{
+    context.commit("setRoom", payload);
   },
   requestRoom({ commit }, payload) {
     return new Promise((resolve, reject) => {

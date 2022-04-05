@@ -26,9 +26,17 @@
         .btn-light {
           &.active {
             background-color: $primary-color !important;
+            box-shadow: 0px 0px 10px 2px rgb( 83 ,83 ,201)  !important;
             i {
               color: $white;
             }
+          }
+        }
+        .active-official{
+          &.active {
+            // border:1px solid $primary-color !important;
+            box-shadow: 0px 0px 10px 2px rgb( 83 ,83 ,201)  !important;
+
           }
         }
         li {

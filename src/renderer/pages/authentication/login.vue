@@ -8,7 +8,7 @@
 import Login from "../../components/Authentication/login.vue";
 
 export default {
-  layout:'login',
+  layout: "login",
   components: {
     Login,
   },

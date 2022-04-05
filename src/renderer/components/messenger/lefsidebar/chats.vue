@@ -7,10 +7,19 @@
     <div class="recent">
       <div class="theme-title">
         <div class="media">
-          <div>
-            <h2>Chats</h2> <button type="button" @click="clearDB()">Clear DB</button> <button type="button" @click="closedb()">Close realm</button>
-            <!-- <h4>Chat from your friends &#128536;</h4> -->
+          <div v-if="officialprofile == null">
+            <h2>Chats</h2>
+            <button type="button" @click="clearallDB()">
+              clear before addnew filed
+            </button>
+            <button type="button" @click="clearDB()">Clear DB</button>
+            <button type="button" @click="checkdata()">check room</button>
           </div>
+          <div v-if="officialprofile != null">
+            <h3 class="mb-2">{{ officialprofile.displayname }}</h3>
+            <!-- <button @click="chkmessage()">check message</button> -->
+          </div>
+          
           <!-- <div class="media-body">
             <a
               class="icon-btn  button-effect pull-right mobile-back"
@@ -259,7 +268,7 @@
                   aria-labelledby="direct-tab"
                 >
                   <ul class="chat-main menu-trigger">
-                    
+                    <!-- <h1 style="position:absolute;top:20%">Loading....</h1> -->
                     <DirectChatUsers />
                   </ul>
                 </div>
@@ -297,23 +306,38 @@ export default {
       },
     };
   },
-  mounted(){
-    console.log('direct chat');
-  },
+  mounted() {},
   computed: {
     ...mapState({
       activechatType: (state) => state.common.activechatType,
       activechat: (state) => state.common.activechat,
       toggleleftside: (state) => state.common.toggleleftside,
       activesidebar: (state) => state.common.activesidebar,
+      profile: (state) => state.auth.profile,
+      officialprofile: (state) => state.auth.ofiicialprofile,
     }),
   },
   methods: {
-    clearDB(){
-      this.ClearRealm()
+    chkmessage(){
+      this.getdataDB.then((data)=>{
+        let msg = data.objects('MESSAGE')
+        msg.map((item)=>{
+          console.log(item.dummyfile);
+          item.dummyfile.map((dumimg)=>{
+            console.log(dumimg);
+          })
+        })
+      })
     },
-    closedb(){
-      this.CloseRealm()
+    getimg() {
+      let img = `background:url(${this.officialprofile.avatars.source});background-size:cover;`;
+      return img;
+    },
+    clearallDB() {
+      this.ClearRealm();
+    },
+    clearDB() {
+      this.addDataToRealm("", "deleteData");
     },
     activechatTab(type) {
       this.$store.state.common.activechatType = type;
@@ -323,7 +347,13 @@ export default {
       this.$store.state.common.showcontactcontent = false;
     },
     mobilemenu() {
-        document.querySelector(".sidebar-toggle").classList.add("mobile-menu");
+      document.querySelector(".sidebar-toggle").classList.add("mobile-menu");
+    },
+    checkdata() {
+      this.getdataDB.then((data) => {
+        let room = data.objects("ROOM");
+        room.map((val) => console.log(val));
+      });
     },
     // activateChat(type) {
     //   this.$store.state.common.activechat = type;

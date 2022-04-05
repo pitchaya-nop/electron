@@ -15,14 +15,43 @@
         :class="activechatType == 1 ? 'active' : ''"
         id="chating"
         :style="{ height: '100vh' }"
-      ></div>
+      >
+        <div class="contact-chat">
+          <div class="rightchat animat-rate">
+            <div class="bg_circle">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+            <div class="cross"></div>
+            <div class="cross1"></div>
+            <div class="cross2"></div>
+            <div class="dot"></div>
+            <div class="dot1"></div>
+          </div>
+        </div>
+        <div class="call-list-center">
+          <img src="../../assets/images/chat.png" alt="" />
+          <div class="animated-bg"><i></i><i></i><i></i></div>
+          <p style="left: 0; transform: none">Select a chat to start</p>
+        </div>
+      </div>
     </div>
     <div v-if="checkactive" class="chat-content tabto" :class="'active'">
+      <!-- custom scroll to slow down -->
       <div
-        class="scrolltopdirectchat messages custom-scroll"
+        class="scrolltopdirectchat messages"
         :class="activechatType == 1 ? 'active' : ''"
         id="chating"
-        :style="
+        :style="[
           chatwallpaperIndex !== 0
             ? [
                 { 'background-image': 'url(' + chatwallpaper + ')' },
@@ -30,8 +59,8 @@
               ]
             : chatwallpapergrandiant !== ''
             ? [{ 'background-image': chatwallpapergrandiant }, styleObject]
-            : ''
-        "
+            : '',
+        ]"
       >
         <!-- <div>
           <h1>Hereeeeeeeeeeeee</h1>
@@ -45,9 +74,43 @@
             </li>
           </ul>
         </div>  -->
-        
+
         <DirectChatHeader />
         <DirectCustomChat />
+        <!-- new message when scrolling top -->
+        <!-- <div
+          style="
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            background: red;
+            padding:16px;
+            display:flex;
+            justify-content:space-between
+          "
+        >
+        <div>
+          <span>New Message Naja</span> 
+        </div>
+         <div>
+          <feather type="chevron-down"></feather>
+        </div>
+        </div> -->
+
+        <!-- icon scroll down
+        <div
+          style="
+            position: absolute;
+            width: auto;
+            bottom: 10px;
+            right: 10px;
+            background: red;
+            padding:16px;
+          "
+        >
+          <feather type="arrow-down"></feather>
+        </div> -->
       </div>
       <div
         class="scrolltopgroupchat messages custom-scroll"
@@ -86,9 +149,28 @@
         <OfficialChatHeader />
         <OfficialCustomChat />
       </div>
-      <div class="message-input">
+
+      <div class="message-input" style="padding-top: 15px">
         <div class="wrap emojis-main">
-          <a
+          <div class="mr-3">
+            <!-- class:dot-btn dot-primary  -->
+            <a
+              title="Image"
+              @click="$refs.file.click()"
+              class="icon-btn btn-outline-primary button-effect toggle-emoji"
+              href="javascript:void(0)"
+              ><feather type="image" size="15" height="15"></feather
+            ></a>
+          </div>
+          <input
+            id="fileimage"
+            type="file"
+            ref="file"
+            @change="onFileChange"
+            hidden
+            multiple
+          />
+          <!-- <a
             class="
               icon-btn
               btn-outline-primary
@@ -142,8 +224,8 @@
                 clip-rule="evenodd"
                 points="668.333,1248.667 901.667,1482 941.667,1432 922.498,1237.846                         687,1210.667 "
               ></polygon></svg
-          ></a>
-          <div class="dot-btn dot-primary mr-3">
+          ></a> -->
+          <div class="mr-3">
             <a
               class="icon-btn btn-outline-primary button-effect toggle-emoji"
               @click="openEmogi()"
@@ -151,7 +233,7 @@
               ><feather type="smile" size="15" height="15"></feather
             ></a>
           </div>
-          <div class="contact-poll">
+          <!-- <div class="contact-poll">
             <b-dropdown
               size="lg"
               variant="link"
@@ -197,30 +279,34 @@
                 ><feather type="paperclip"></feather>attach</b-dropdown-item
               >
             </b-dropdown>
-          </div>
+          </div> -->
 
-          <input
+          <textarea
             class="setemoj"
             id="setemoj"
             v-model="text"
-            v-on:keyup.enter="addChat()"
+            @keydown.enter.exact.prevent
+            v-on:keyup.enter="addChat"
             type="text"
             placeholder="Write your message..."
           />
-          <a
+          <!-- v-on:keyup.enter="addChat()" -->
+          <!-- <a
             class="icon-btn btn-outline-primary button-effect mr-3 ml-3"
             href="javascript:void(0)"
-            ><feather type="mic" size="15" height="15"></feather
-          ></a>
-          <button
-            class="submit icon-btn btn-primary"
-            :class="text === '' ? 'disabled' : ''"
-            id="send-msg"
-            :disabled="text === ''"
-            @click="addChat()"
-          >
-            <feather type="send" size="15" height="15"></feather>
-          </button>
+            ><feather type="mic" size="15" height="15"></feather>
+          </a> -->
+          <div class="mr-3 ml-3">
+            <button
+              class="submit icon-btn btn-primary mr-3"
+              :class="text === '' ? 'disabled' : ''"
+              id="send-msg"
+              :disabled="text === ''"
+              @click="handleAddChat()"
+            >
+              <feather type="send" size="15" height="15"></feather>
+            </button>
+          </div>
           <div class="emojis-contain" :class="showemogi ? 'open' : ''">
             <div class="emojis-sub-contain custom-scroll">
               <ul>
@@ -272,7 +358,7 @@ import CodeSnippet from "../messenger/modals/codesnippets.vue";
 import Poll from "../messenger/modals/pollModal.vue";
 import OfficialChatHeader from "./chat/OfficialChat/officialchatheader.vue";
 import OfficialCustomChat from "./chat/OfficialChat/officialcustomchat.vue";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 export default {
   components: {
     Stickers,
@@ -362,59 +448,139 @@ export default {
     backtochat() {
       document.querySelector(".sidebar-toggle").classList.remove("mobile-menu");
     },
-    async addChat () {
-      if (this.text != "") {
-        // if (this.activechatType == 1) {
-          console.log('text in here');
+
+    async onFileChange(e) {
+      
+      let arrimg = [];
+      for (let i = 0; i < e.target.files.length; i++) {
+        const formdata = new FormData();
+        formdata.append("file", e.target.files[i]);
+        formdata.append("sessionId", this.sessionID);
+        formdata.append("mediaRefKey", uuidv4());
+        const resimg = await this.$store.dispatch("chat/uploadImage", formdata);
+        if (resimg.data.code === "0000") {
+          arrimg.push(resimg.data.data);
+        }
+      }
+      const payload = {
+        sessionId: this.sessionID,
+        referenceKey: uuidv4(),
+        contentType: "IMAGE",
+        content: "",
+        destructTime: 0,
+        senderId: this.profile.id,
+        oaId: this.profile.id,
+        media: arrimg,
+      };
+      const res = await this.$store.dispatch("chat/addChat", payload);
+      console.log(res);
+      this.scrollbottom();
+      document.getElementById("fileimage").value = ""
+      // if(resimg.data.code === '0000'){
+      //   console.log(true);
+      //   let arrimg = []
+      //   arrimg.push(resimg.data.data)
+      //   console.log(arrimg);
+      //   const payload = {
+      //       sessionId: this.sessionID,
+      //       referenceKey: uuidv4(),
+      //       contentType: "IMAGE",
+      //       content: "",
+      //       destructTime: 0,
+      //       senderId: this.profile.id,
+      //       oaId:this.profile.id,
+      //       media:arrimg
+      //     };
+      //     // this.addDataToRealm(payload, "addDummyMessage");
+
+      //     const res = await this.$store.dispatch("chat/addChat", payload);
+      //     // console.log(res);
+      //     this.scrollbottom()
+      // }
+    },
+    async addChat(e) {
+      if (e.keyCode == 13 && e.shiftKey == false) {
+        if (this.text != "") {
           const payload = {
             sessionId: this.sessionID,
             referenceKey: uuidv4(),
             contentType: "TEXT",
             content: this.text,
+            // this.text.slice(0, -1)
             destructTime: 0,
+            senderId: this.profile.id,
+            oaId: this.profile.id,
           };
+          this.text = "";
+          this.emogiarray = [];
+          this.addDataToRealm(payload, "addDummyMessage");
+          this.setMessage(this.sessionID);
           const res = await this.$store.dispatch("chat/addChat", payload);
-        console.log(res);
-        // try {
-        //   const payload = {
-        //     sessionId: sessionID,
-        //     referenceKey: uuidv4(),
-        //     contentType: "TEXT",
-        //     content: this.text,
-        //     destructTime: 0,
-        //   };
-        //   const response = await this.$store.dispatch('chat/addChat',payload);
-        //   console.log(response);
-        //   if (response.status === 200) {
-            
-        //     // this.addDataToRealm(response.data.data, "addRooms");
-        //   }
-        // } catch (error) {}
+          console.log(res);
+          if (res.data.message != "success") {
+            this.addDataToRealm(payload, "failedUpdateDummyMesaage");
+            this.setMessage(this.sessionID);
+          }
+          this.scrollbottom();
 
-        
-        var container = this.$el.querySelector(".scrolltopdirectchat");
-        setTimeout(function () {
+          // var container = this.$el.querySelector(".scrolltopdirectchat");
+          // container.scrollTop = container.scrollHeight;
+          // container.className += " custom-scroll";
+          // setTimeout(function () {
           // container.scrollBy({ top: 1000, behavior: "smooth" });
-          container.scrollTop = container.scrollHeight;
-        }, 100);
-        // setTimeout(function () {
-        //   container.scrollBy({ top: 1000, behavior: "smooth" });
-        // }, 1100);
-        // }
-        // else {
-        //   this.$store.dispatch("groupchat/addChat", this.text);
-        //   var containerfluid = this.$el.querySelector(".scrolltopgroupchat");
-        //   setTimeout(function () {
-        //     containerfluid.scrollBy({ top: 200, behavior: "smooth" });
-        //   }, 310);
-        //   setTimeout(function () {
-        //     containerfluid.scrollBy({ top: 200, behavior: "smooth" });
-        //   }, 1100);
-        // }
+          // container.scrollTop = container.scrollHeight;
+          //   container.className = container.className.replace(
+          //     " custom-scroll",
+          //     ""
+          //   );
+          // }, 50);
+          // setTimeout(function () {
+          //   container.scrollBy({ top: 1000, behavior: "smooth" });
+          // }, 1100);
+          // }
+          // else {
+          //   this.$store.dispatch("groupchat/addChat", this.text);
+          //   var containerfluid = this.$el.querySelector(".scrolltopgroupchat");
+          //   setTimeout(function () {
+          //     containerfluid.scrollBy({ top: 200, behavior: "smooth" });
+          //   }, 310);
+          //   setTimeout(function () {
+          //     containerfluid.scrollBy({ top: 200, behavior: "smooth" });
+          //   }, 1100);
+          // }
 
-        this.text = "";
-        // this.emogiarray = [];
+          // this.text = "";
+          // this.emogiarray = [];
+        }
       }
+    },
+    async handleAddChat() {
+      if (this.text != "") {
+        const payload = {
+          sessionId: this.sessionID,
+          referenceKey: uuidv4(),
+          contentType: "TEXT",
+          content: this.text,
+          destructTime: 0,
+          senderId: this.profile.id,
+          oaId: this.profile.id,
+        };
+        this.text = "";
+        this.emogiarray = [];
+        this.addDataToRealm(payload, "addDummyMessage");
+        this.setMessage(this.sessionID);
+        const res = await this.$store.dispatch("chat/addChat", payload);
+        console.log(res);
+        if (res.data.message != "success") {
+          this.addDataToRealm(payload, "failedUpdateDummyMesaage");
+          this.setMessage(this.sessionID);
+        }
+        this.scrollbottom();
+      }
+    },
+    scrollbottom() {
+      var container = this.$el.querySelector(".scrolltopdirectchat");
+      container.scrollTop = container.scrollHeight;
     },
     getImgUrl(path) {
       return require("@/assets/images/" + path);
@@ -431,7 +597,6 @@ export default {
     },
   },
   mounted() {
-    console.log("chatvue componentqqdsndioqndoasndadsodnaio");
     this.$store.state.common.chatwallpaper =
       this.chatwallpaperIndex !== 0
         ? this.getImgUrl(
@@ -462,7 +627,8 @@ export default {
       checkactive: (state) => state.chat.activeuser,
       iscontact: (state) => state.common.iscontact,
       activecontact: (state) => state.contact.activecontact,
-      sessionID:(state)=>state.chat.session
+      sessionID: (state) => state.chat.session,
+      profile: (state) => state.auth.profile,
     }),
   },
 };

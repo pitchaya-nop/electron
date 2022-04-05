@@ -1,3 +1,4 @@
+
 <template>
   <!--SignIn start -->
   <div class="container-fluid p-0">
@@ -6,18 +7,16 @@
         <div class="login-contain-main">
           <div class="left-page">
             <div class="login-content">
-              <div class="login-content-header">
-                <div class="d-flex">
-                  <img
-                    class="image-fluid my-auto"
-                    src="../../assets/images/logo/logo-circle.png"
-                    alt="images"
-                  />
-                  <span class="my-auto ml-2 title-text">GoChat</span>
-                </div>
+              <div class="login-content-header mt-3 mb-3">
+                <img
+                  class="image-fluid my-auto"
+                  src="../../assets/images/logo/logo-circle.png"
+                  alt="images"
+                />
               </div>
               <h3>Hello Everyone , We are GoChat</h3>
               <h4>Welcome to GoChat please login to your account.</h4>
+
               <form class="form1">
                 <div class="form-group">
                   <label class="col-form-label" for="inputEmail3"
@@ -37,6 +36,7 @@
                   <label class="col-form-label" for="inputPassword3"
                     >Password</label
                   ><span> </span>
+
                   <input
                     class="form-control"
                     id="inputPassword3"
@@ -82,6 +82,7 @@
                   </div>
                 </div>
               </form>
+
               <!--              <div>-->
               <!--              <div class="line">-->
               <!--                <h6>OR Connect with</h6>-->
@@ -204,21 +205,15 @@
 
 <script>
 const CryptoJS = require("crypto-js");
-
 export default {
   data() {
     return {
-      // email: "ratchanonsangon@gmail.com",
-      // password: "Aa123456",
-
-      // email: "fimal45090@farerata.com",
-      // password: "Ab123456",
-      // email: "chet16mail@gmail.com",
-      // password: "Aa1234",
-      // email:'daxer27158@farerata.com',
-      // password:'Ab123456'
-      email:'laxabem918@hddang.com',
-      password:'Ab123456'
+      //dev
+      email: "official1@mail.com",
+      password: "Aa1234",
+      //sit
+      // email: "juhand@gochat.com",
+      // password: "P@ssw0rd",
     };
   },
   methods: {
@@ -247,10 +242,10 @@ export default {
         console.log("response", response);
 
         if (response.code === "0000") {
-          
           const data = response.data;
           await this.$store.dispatch("auth/setToken", data.accessToken);
           await this.$store.dispatch("auth/setProfile", data.userProfile);
+
           this.$router.push("/");
         }
         console.log(data);

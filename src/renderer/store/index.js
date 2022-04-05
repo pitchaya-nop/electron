@@ -8,8 +8,8 @@ import layout from "./modules/layout";
 import auth from "./modules/auth";
 import contact from "./modules/contact";
 import room from "./modules/room";
-import VueSocketIO from "vue-socket.io";
-import SocketIO from "socket.io-client";
+import official from './modules/official'
+
 Vue.use(Vuex);
 
 // const options = { path: "/socket/socket.io" }; //Options object to pass into SocketIO
@@ -53,6 +53,7 @@ const createStore = () => {
       auth,
       contact,
       room,
+      official
     },
   });
 };

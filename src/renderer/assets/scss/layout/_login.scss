@@ -10,8 +10,8 @@
   }
   h3{
     font-size: calc(18px + (26 - 18) * ((100vw - 320px) / (1920 - 320)));
-    font-family: $font-3;
-    font-weight: 500;
+    font-family: $font-3 ;
+    font-weight: 600;
     padding-bottom : 16px;
   }
   h4{
@@ -813,9 +813,7 @@
             margin-top: unset;
             margin-left: 15px;
           }
-          a {
-
-          }
+          
         }
       }
       .login-content2 {
@@ -865,9 +863,7 @@
           .btn  {
             padding: 12px 25px;
           }
-          .signpbtn {
-            // margin-top: 10px;
-          }
+          
         }
          .form-control {
             padding:10px;

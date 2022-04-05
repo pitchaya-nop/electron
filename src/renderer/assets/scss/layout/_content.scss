@@ -10,10 +10,12 @@
     top: 0;
     background-color: $primary-light;
     display: none;
-    animation: fadeInLeft 300ms ease-in-out;
+    // animation: fadeInLeft 300ms ease-in-out;
+    animation: none;
     &.active {
       display: block;
-      animation: fadeInLeft 300ms ease-in-out;
+      animation: none;
+      // animation: fadeInLeft 300ms ease-in-out;
     }
     .contact-details {
       padding: 20px 30px;
@@ -65,7 +67,7 @@
               margin-top: 7px;
             }
             &:before {
-              content: '';
+              content: "";
               position: absolute;
               right: 0;
               height: 30px;
@@ -78,7 +80,7 @@
             .mute {
               i {
                 &:after {
-                  content: '';
+                  content: "";
                   position: absolute;
                   height: 2px;
                   width: 24px;
@@ -179,7 +181,7 @@
     }
     .dropdown.show {
       &:before {
-        content: '';
+        content: "";
         position: absolute;
         width: 0;
         height: 0;
@@ -198,6 +200,22 @@
       font-size: 16px;
       color: $muted-font;
       font-family: $font-1;
+      &:focus {
+        box-shadow: none;
+        outline-color: transparent !important;
+      }
+      &:focus-visible {
+        outline: none;
+      }
+    }
+    textarea {
+      width: calc(100% - 100px);
+      font-size: 16px;
+      resize: none;
+      color: $muted-font;
+      font-family: $font-1;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      padding: 10px;
       &:focus {
         box-shadow: none;
         outline-color: transparent !important;
@@ -336,7 +354,8 @@
       opacity: 1;
       visibility: visible;
       z-index: 3;
-      animation: fadeInLeft 300ms ease-in-out;
+      animation: none;
+      // animation: fadeInLeft 31100ms ease-in-out;
     }
   }
   .contact-content,
@@ -486,12 +505,12 @@
   .chitchat-main {
     .message-input {
       width: calc(100% - 850px);
-      transition: all 0.9s;
+      // transition: all 0.9s;
     }
     .messages {
       .contact-details {
         width: 50.9vw !important;
-        transition: all 0.9s ease;
+        // transition: all 0.9s ease;
       }
     }
   }

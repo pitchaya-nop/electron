@@ -7,6 +7,7 @@ import wallpaper from "../../data/wallpapers.json";
 
 const state = {
   iscontact:false,
+  isloadingimage:false,
   activechatType: 1,
   activechat: 1,
   activecall: 1,

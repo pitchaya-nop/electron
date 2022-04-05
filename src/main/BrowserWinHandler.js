@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { EventEmitter } from 'events'
-import { BrowserWindow, app } from 'electron'
+import { BrowserWindow, app , dialog } from 'electron'
 const DEV_SERVER_URL = process.env.DEV_SERVER_URL
 const isProduction = process.env.NODE_ENV === 'production'
 const isDev = process.env.NODE_ENV === 'development'
@@ -37,16 +37,22 @@ export default class BrowserWinHandler {
 
   _create () {
     this.browserWindow = new BrowserWindow(
-      {
+      { 
         ...this.options,
         webPreferences: {
           ...this.options.webPreferences,
           webSecurity: isProduction, // disable on dev to allow loading local resources
           nodeIntegration: true, // allow loading modules via the require () function
           contextIsolation: false, // https://github.com/electron/electron/issues/18037#issuecomment-806320028
-        }
+        },
+        width: 1400,
+        height: 1000
       }
     )
+    // this.browserWindow.webcontents.on("did-finish-load",()=>{
+    //   dialog.showOpenDialog();
+    // })
+    
     this.browserWindow.on('closed', () => {
       // Dereference the window object
       this.browserWindow = null

@@ -4,10 +4,12 @@
     <div v-if="activesidebar == 1">
       <Contacts />
     </div>
-    <div v-if="activesidebar == 2">
+    <div v-if="activesidebar == 2 || activesidebar == 3">
       <Chats />
     </div>
+    <div>
 
+    </div>
     <!-- <Favourite />
     <Documents />
     <ContactList />

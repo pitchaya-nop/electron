@@ -1,13 +1,29 @@
 /* Direct Chat store For Direct Chat Functionality */
 
 import Users from "../../data/directchat.json";
-
+// import VueSocketIO from "vue-socket.io";
+// import SocketIO from "socket.io-client";
+// import Vue from "vue";
+const innitialstate = {
+  chats: null,
+  session: null,
+  activeuser: null,
+  typing: false,
+  unreadtime: null,
+  firstmessageunread: null,
+  messagelength:50,
+  startmessagelength:0,
+}
 const state = {
   users: Users.data,
   chats: null,
   session: null,
   activeuser: null,
   typing: false,
+  unreadtime: null,
+  firstmessageunread: null,
+  messagelength:50,
+  startmessagelength:0,
   // dbchange: 0
 };
 
@@ -27,7 +43,7 @@ const getters = {
 
     // let message = this.getdataDB
     // var chats = message.objects("MESSAGE").filtered(`sessionid === ${state.activeuser}`)
-    return { active: state.activeuser, chat: state.chats };
+    return { active: state.activeuser, chat: state.chats, unread: state.unreadtime, firstunread: state.firstmessageunread };
   },
 };
 
@@ -45,8 +61,17 @@ const mutations = {
   },
   setChat: (state, payload) => {
     state.chats = payload
-    
+
   },
+  setUnreadtime: (state, payload) => {
+    state.unreadtime = payload
+  },
+  setMessagefirstunread: (state, payload) => {
+    state.firstmessageunread = payload
+  },
+  RESET_STATE(state) {
+    Object.assign(state, innitialstate)
+  }
   /* Add Direct Chat Sticker */
   //   addSticker: (state, payload) => {
   //     var today = new Date().toLocaleString("en-US", {
@@ -124,6 +149,18 @@ const actions = {
   setSessionChat: (context, payload) => {
     context.commit("setSessionChat", payload);
   },
+  setUnreadtime: (context, payload) => {
+    context.commit("setUnreadtime", payload);
+  },
+  setMessagefirstunread: (context, payload) => {
+    context.commit("setMessagefirstunread", payload)
+  },
+  chatRead: (context, payload) => {
+    this.$socket.emit('message:read', payload)
+  },
+  resetState({ commit }) {
+    commit('RESET_STATE')
+  },
   // chatChange: (context, payload) => {
   //   context.commit("chatChange", payload);
   // },
@@ -131,13 +168,25 @@ const actions = {
   // addSticker: (context, payload) => {
   //   context.commit("addSticker", payload);
   // },
-  setScroll(){
+  setScroll() {
     const contain = document.querySelector('.scrolltopdirectchat')
     contain.scrollTop = contain.scrollHeight;
+  },
+  uploadImage({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      try {
+        
+        const response = this.$axios.post(`/chat/image/upload`, payload);
+        resolve(response);
+      } catch (e) {
+        reject(e);
+      }
+    });
   },
   addChat({ commit }, payload) {
     return new Promise((resolve, reject) => {
       try {
+        
         const response = this.$axios.post(`/chat/send`, payload);
         resolve(response);
       } catch (e) {
