@@ -204,9 +204,15 @@ export default {
           console.log(data);
           data.data.map((officialdata) => {
             this.$socket.emit("oa:auth", `{"userId":"${officialdata.id}"}`);
+            this.sockets.subscribe(`me:official:update:${officialdata.id}`,function(data){
+              console.log('me official update');
+              console.log(data);
+            })
             this.sockets.subscribe(
               `rooms:official:update:${officialdata.id}`,
               function (data) {
+                console.log('room update');
+                console.log(data);
                 data.data.map((item) => {
                   item.roomtype = "official";
                   item.idofficialroom = officialdata.id;
@@ -219,6 +225,8 @@ export default {
                 this.sockets.subscribe(
                   `messages:${data.data[0].sessionId}`,
                   function (data) {
+                    console.log('messages');
+                    console.log(data);
                     this.addDataToRealm(data.data, "addMessage");
                     // this.addDataToRealm(data.data, "updateShow");
                     this.addDataToRealm(officialdata, "updateUnreadcount");
@@ -239,6 +247,7 @@ export default {
                 this.sockets.subscribe(
                   `messages:update:${data.data[0].sessionId}`,
                   function (msgupdate) {
+                    console.log('message update');
                     console.log(msgupdate);
                     msgupdate.data.map((data) => {
                       if (this.sesssionid == data.sessionId) {
@@ -315,6 +324,7 @@ export default {
                   `messages:update:${item.sessionId}`,
                   function (msgupdate) {
                     msgupdate.data.map((data) => {
+                      console.log('message update');
                       console.log(data);
                       if (this.sesssionid == data.sessionId) {
                         this.$socket.emit(
